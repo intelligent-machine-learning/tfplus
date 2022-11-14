@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 510a283..86243db 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -107,10 +107,3 @@ install(FILES ${CMAKE_SOURCE_DIR}/scripts/zdfs-rpm-x86_64.conf DESTINATION /etc/
+ # rpm devel: include directory, config
+ install(DIRECTORY ${CMAKE_SOURCE_DIR}/include DESTINATION /usr/local COMPONENT ${TYPE_SDK}-devel)
+ install(FILES ${CMAKE_SOURCE_DIR}/scripts/zdfs-rpm-x86_64.conf DESTINATION /etc/ld.so.conf.d/ COMPONENT ${TYPE_SDK}-devel)
+-
+-add_subdirectory(swig)
+-add_subdirectory(example)
+-add_subdirectory(v1)
+-add_subdirectory(benchmark)
+-add_subdirectory(test)
+-add_subdirectory(util)

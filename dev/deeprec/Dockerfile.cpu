@@ -1,0 +1,58 @@
+FROM reg.docker.alibaba-inc.com/penrose/paitf:paitf_dev 
+
+RUN yum install alios7u-2_17-gcc-6-repo.noarch -y && \
+    yum install gcc gdb coreutils binutils bash \
+    glibc-locale-source glibc-langpack-en -y && \
+    yum clean all && \
+    yum install git -b current -y && \
+    yum install lksctp-tools-devel zlib-devel -y && \
+    yum install cmake -b current -y &&\
+    yum install alicpp-gcc651-glog -b current -y && \
+    yum install openssl-devel -b current -y && \
+    # yum install bzip2-devel -b current -y && \
+    ln -sf /apsara/alicpp/built/gcc-6.5.1/glog-0.3.4/include/glog/ /usr/include/glog && \
+    ln -sf /apsara/alicpp/built/gcc-6.5.1/glog-0.3.4/lib/libglog.a /usr/lib64/libglog.a && \
+    ln -s /lib64/libbz2.so.1 /lib64/libbz2.so && \
+    ln -s /lib64/liblzma.so.5.0.99 /lib64/liblzma.so && \
+    rm -rf /var/cache/yum/* && \
+    localedef -i en_US -f UTF-8 en_US.UTF-8
+    
+RUN wget https://alps-common.oss-cn-hangzhou-zmf.aliyuncs.com/users/xuantai/Miniconda3-latest-Linux-x86_64.sh \
+		&& bash Miniconda3-latest-Linux-x86_64.sh -b -p /root/miniconda \
+    && rm Miniconda3-latest-Linux-x86_64.sh
+RUN /root/miniconda/bin/conda config --add channels https://mirrors.aliyun.com/anaconda/pkgs/main/
+RUN /root/miniconda/bin/conda config --add channels https://mirrors.aliyun.com/anaconda/cloud/conda-forge/
+RUN /root/miniconda/bin/conda config --add channels https://mirrors.aliyun.com/anaconda/cloud/bioconda/
+RUN /root/miniconda/bin/conda clean -a
+RUN /root/miniconda/bin/conda create -n tensorflow_build python=3.7 -y
+     
+
+RUN source /root/miniconda/etc/profile.d/conda.sh \
+    && conda activate tensorflow_build && \
+    mkdir -p ~/.pip && \
+    echo -e "\n\
+    [global]\n\
+    index-url = https://pypi.antfin-inc.com/simple/\n\
+    extra-index-url = https://mirrors.aliyun.com/pypi/simple\n\
+    trusted-host = pypi.antfin-inc.com mirrors.aliyun.com\n\
+    " | sed 's/^ \+//g' > ~/.pip/pip.conf &&\
+    pip install numpy==1.16.0 keras_applications==1.0.4 keras_preprocessing==1.0.2 wheel  astor protobuf==3.19.0 && \
+    rm -rf /root/.cache/pip/
+    
+    
+RUN echo -e "\
+    export JAVA_HOME=\"/opt/taobao/java\" \n\
+    shopt -s expand_aliases \n\
+    alias pip=\"pip3\" \n\
+    alias python=\"python3\" \n\
+    " | sed 's/^ \+//g' >> ~/.bashrc && \
+    mkdir -p ~/.pip && \
+    echo -e "\n\
+    [global]\n\
+    timeout = 300 \n\
+    index-url = https://pypi.antfin-inc.com/simple/\n\
+    extra-index-url = https://mirrors.aliyun.com/pypi/simple\n\
+    trusted-host = pypi.antfin-inc.com mirrors.aliyun.com\n\
+    " | sed 's/^ \+//g' > ~/.pip/pip.conf && \
+    echo "source /root/miniconda/etc/profile.d/conda.sh \
+    && conda activate tensorflow_build" >> /root/.bashrc

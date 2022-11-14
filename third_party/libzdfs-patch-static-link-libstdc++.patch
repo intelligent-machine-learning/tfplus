@@ -1,0 +1,12 @@
+diff --git a/cmake/dfs_shared.cmake b/cmake/dfs_shared.cmake
+index 8338cf9..baa8f60 100755
+--- a/cmake/dfs_shared.cmake
++++ b/cmake/dfs_shared.cmake
+@@ -38,6 +38,7 @@ target_link_libraries(
+   alog
+   ${COV_FLAGS}
+   pthread rt dl crypto z
++  -static-libstdc++
+   -Wl,--version-script=${CMAKE_SOURCE_DIR}/version/zdfs.version
+ )
+ 

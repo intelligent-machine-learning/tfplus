@@ -1,0 +1,13 @@
+--- a/boost/lockfree/spsc_queue.hpp	2020-08-11 22:56:18.000000000 +0800
++++ b/boost/lockfree/spsc_queue.hpp	2022-09-30 07:42:39.907523027 +0800
+@@ -576,8 +576,8 @@
+     ~runtime_sized_ringbuffer(void)
+     {
+         // destroy all remaining items
+-        T out;
+-        while (pop(&out, 1)) {}
++        detail::consume_noop consume_functor;
++        (void)consume_all(consume_functor);
+ 
+ #ifdef BOOST_NO_CXX11_ALLOCATOR
+         Alloc::deallocate(array_, max_elements_);
