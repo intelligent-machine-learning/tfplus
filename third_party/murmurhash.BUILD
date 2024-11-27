@@ -8,17 +8,17 @@ genrule(
     "@local_config_cc//:toolchain",
   ],
   outs = [
-    "libmurmurhash.a",
+    "libmurmurhashh.a",
   ],
   cmd = """
     set -e
     WORK_DIR=$$PWD
     DEST_DIR=$$PWD/$(@D)
-    export CXXFLAGS="-msse4.2 -msse4.1 -mavx -mavx2 -mfma -mfpmath=both -frecord-gcc-switches -D_GLIBCXX_USE_CXX11_ABI=0  -std=c++14 -fPIC -DNDEBUG -D_GLIBCXX_USE_CXX11_ABI=0 -D__STDC_FORMAT_MACROS -fno-canonical-system-headers -Wno-builtin-macro-redefined -D__DATE__=redacted -D__TIMESTAMP__=redacted -D__TIME__=redacted"
+    export CXXFLAGS="-msse4.2 -msse4.1 -mavx -mavx2 -mfma -mfpmath=both -frecord-gcc-switches -D_GLIBCXX_USE_CXX11_ABI=0  -std=c++17 -fPIC -DNDEBUG -D_GLIBCXX_USE_CXX11_ABI=0 -D__STDC_FORMAT_MACROS -fno-canonical-system-headers -Wno-builtin-macro-redefined -D__DATE__=redacted -D__TIMESTAMP__=redacted -D__TIME__=redacted"
     pushd external/murmurhash
     g++ $$CXXFLAGS -c src/MurmurHash1.h src/MurmurHash2.h src/MurmurHash3.h src/MurmurHash1.cpp src/MurmurHash2.cpp src/MurmurHash3.cpp
     ar -crv libmurmurhash.a MurmurHash1.o MurmurHash2.o MurmurHash3.o
-    cp libmurmurhash.a $$DEST_DIR/libmurmurhash.a
+    cp libmurmurhash.a $$DEST_DIR/libmurmurhashh.a
     popd
     """,
 )
@@ -31,7 +31,7 @@ cc_library(
     "src/MurmurHash3.h"
   ],
   srcs = [
-    "libmurmurhash.a",
+    "libmurmurhashh.a",
   ],
   visibility = ["//visibility:public"],
   linkstatic = 1,

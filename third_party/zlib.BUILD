@@ -32,9 +32,12 @@ cc_library(
         "zutil.h",
     ],
     hdrs = ["zlib.h"],
-    copts = [
+    copts = select({
+        "//conditions:default": [
             "-Wno-shift-negative-value",
             "-DZ_HAVE_UNISTD_H",
-    ],
+        ],
+    }),
     includes = ["."],
 )
+
