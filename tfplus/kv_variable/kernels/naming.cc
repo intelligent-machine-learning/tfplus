@@ -16,7 +16,7 @@ limitations under the License.
 
 #include "tensorflow/core/lib/strings/stringprintf.h"
 #include "tensorflow/core/platform/logging.h"
-using namespace tensorflow; // NOLINT
+
 namespace tfplus {
 
 string MetaFilename(StringPiece prefix) {
